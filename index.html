@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutations</title>
+</head>
+
+<body>
+    <div id="observedElement">
+        <p>Initial content</p>
+    </div>
+    <button id="changeContentButton">Change Content</button>
+    <script>
+        // Select the target node to observe
+        const targetNode = document.getElementById('observedElement');
+
+        // Options for the observer (which mutations to observe)
+        const config = {
+            childList: true, // Observe direct children
+            subtree: true,   // Observe all descendants
+            characterData: true, // Observe changes to text content
+            attributes: true // Observe changes to attributes
+        };
+
+        // Callback function to execute when mutations are observed
+        const callback = (mutationsList, observer) => {
+            console.log('mutationsList', mutationsList, observer)
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    console.log('A child node has been added or removed.');
+                } else if (mutation.type === 'attributes') {
+                    console.log('The ' + mutation.attributeName + ' attribute was modified.');
+                } else if (mutation.type === 'characterData') {
+                    console.log('Text content changed in a node.');
+                }
+            }
+        };
+
+        // Create an instance of MutationObserver with the callback function
+        const observer = new MutationObserver(callback);
+
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
+
+        // Example code to trigger mutations (changing content on button click)
+        document.getElementById('changeContentButton').addEventListener('click', () => {
+            targetNode.innerHTML = '<p>New content added!</p>'; // This will trigger a mutation
+        });
+    </script>
+</body>
+
+</html>
