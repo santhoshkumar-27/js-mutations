@@ -86,3 +86,25 @@ waitUntil(() => {
 }, () => {
     console.log('data is failure')
 })
+
+
+// wait until functions now return as promise
+function waitUntil(predicate) {
+    return new Promise((resolve, reject) => {
+        var int = setInterval(function () {
+            if (predicate()) {
+                clearInterval(int);
+                int = null;
+                resolve();
+            }
+        }, 50);
+
+        setTimeout(function () {
+            if (int !== null) {
+                clearInterval(int);
+                reject();
+            }
+        }, 20000);
+    })
+
+}
