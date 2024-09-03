@@ -56,3 +56,33 @@
 window.wrapperForMutationObservor('.selector', function (ele) {
     callback(ele);
 });
+
+// wait until functions
+function waitUntil(predicate, success, error) {
+    var int = setInterval(function () {
+        if (predicate()) {
+            clearInterval(int);
+            int = null;
+            success();
+        }
+    }, 50);
+
+    setTimeout(function () {
+        if (int !== null) {
+            clearInterval(int);
+            if (typeof (error) === 'function') {
+                error();
+            }
+        }
+    }, 20000);
+}
+
+
+
+waitUntil(() => {
+    return typeof window.Jquery === 'function'
+}, () => {
+    console.log('data is ready')
+}, () => {
+    console.log('data is failure')
+})
